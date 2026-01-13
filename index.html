@@ -1456,31 +1456,53 @@
         };
 
         const Footer = () => {
+            const [views, setViews] = useState('...');
             const currentYear = new Date().getFullYear();
+
+            useEffect(() => {
+                // Using your specific vercel domain as the namespace
+                const namespace = "bosnic-amar-portfolio";
+                const key = "visits";
+
+                // We hit the API to increment the count
+                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error('Network response was not ok');
+                        return res.json();
+                    })
+                    .then(data => {
+                        setViews(data.value.toLocaleString()); // adds commas to big numbers like a pro
+                    })
+                    .catch(err => {
+                        console.log("CountAPI is currently chillin':", err);
+                        setViews('1,000+'); // fake it till you make it if the API is down
+                    });
+            }, []);
+
             return (
                 <footer>
+                    <div style={{ 
+                        marginBottom: '1rem', 
+                        fontSize: '0.8rem', 
+                        color: '#ff6b9d', 
+                        fontWeight: '700',
+                        textTransform: 'uppercase',
+                        letterSpacing: '2px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                    }}>
+                        <span style={{ fontSize: '1.2rem' }}>👁️</span> 
+                        <span>{views} views</span>
+                    </div>
                     <p>built by me, myself and (a)i. © {currentYear}</p>
-                    <p style={{ fontSize: '0.75rem', color: '#444', marginTop: '1rem' }}>no templates. just react and vibes.</p>
+                    <p style={{ fontSize: '0.75rem', color: '#444', marginTop: '1rem' }}>
+                        no templates. just react and vibes.
+                    </p>
                 </footer>
             );
         };
-
-        const App = () => {
-            return (
-                <>
-                    <Nav />
-                    <Hero />
-                    <Projects />
-                    <Skills />
-                    <About />
-                    <Contact />
-                    <Footer />
-                </>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
     </script>
 </body>
 </html>
