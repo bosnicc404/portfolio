@@ -1456,42 +1456,31 @@
         };
 
         const Footer = () => {
-            const [views, setViews] = React.useState('...');
             const currentYear = new Date().getFullYear();
-
-            React.useEffect(() => {
-                
-                const namespace = "bosnicc-portfolio";
-                const key = "visits";
-
-                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        setViews(data.value);
-                    })
-                    .catch(() => setViews('lots of'));
-            }, []);
-
             return (
                 <footer>
-                    <div style={{ 
-                        marginBottom: '1rem', 
-                        fontSize: '0.8rem', 
-                        color: '#ff6b9d', 
-                        fontWeight: '700',
-                        textTransform: 'uppercase',
-                        letterSpacing: '1px'
-                    }}>
-                        <span style={{ marginRight: '8px' }}>👁️</span> 
-                        {views} views and counting
-                    </div>
                     <p>built by me, myself and (a)i. © {currentYear}</p>
-                    <p style={{ fontSize: '0.75rem', color: '#444', marginTop: '1rem' }}>
-                        no templates. just react and vibes.
-                    </p>
+                    <p style={{ fontSize: '0.75rem', color: '#444', marginTop: '1rem' }}>no templates. just react and vibes.</p>
                 </footer>
             );
         };
+
+        const App = () => {
+            return (
+                <>
+                    <Nav />
+                    <Hero />
+                    <Projects />
+                    <Skills />
+                    <About />
+                    <Contact />
+                    <Footer />
+                </>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
