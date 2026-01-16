@@ -1,1483 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dev Portfolio</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #0f1429 100%);
-            color: #e0e0e0;
-            line-height: 1.6;
-            font-weight: 400;
-        }
-
-        /* Navigation */
-        nav {
-            padding: 1.5rem 2rem;
-            background: rgba(10, 14, 39, 0.95);
-            border-bottom: 1px solid rgba(255, 107, 157, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        nav a {
-            color: #a0a0ff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            position: relative;
-            font-weight: 500;
-        }
-
-        nav a::before {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #ff6b9d, #ff8ab3);
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        nav a:hover::before,
-        nav a.active::before {
-            width: 100%;
-        }
-
-        nav a:hover,
-        nav a.active {
-            color: #ff6b9d;
-        }
-
-        /* Hero */
-        .hero {
-            padding: 6rem 2rem 4rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 107, 157, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(40px);
-            animation: float 8s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, -30px); }
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.2;
-            letter-spacing: -1.5px;
-            background: linear-gradient(135deg, #ffffff 0%, #ff6b9d 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #888;
-            margin-bottom: 1.5rem;
-            max-width: 600px;
-            font-weight: 500;
-        }
-
-        .hero p {
-            color: #aaa;
-            max-width: 700px;
-            margin-bottom: 2.5rem;
-            font-size: 1rem;
-            line-height: 1.8;
-        }
-
-        .cta {
-            display: inline-block;
-            padding: 0.9rem 2rem;
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff5587 100%);
-            color: #0a0e27;
-            text-decoration: none;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            width: fit-content;
-            font-size: 0.95rem;
-            box-shadow: 0 8px 24px rgba(255, 107, 157, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.5s;
-        }
-
-        .cta:hover::before {
-            left: 100%;
-        }
-
-        .cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(255, 107, 157, 0.4);
-        }
-
-        .typing-effect {
-            animation: blink 0.8s infinite;
-            color: #ff6b9d;
-            font-weight: 700;
-        }
-
-        @keyframes blink {
-            0%, 49%, 100% { opacity: 1; }
-            50%, 99% { opacity: 0; }
-        }
-
-        /* Projects Section */
-        .projects {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .projects h2 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .section-desc {
-            color: #666;
-            margin-bottom: 3rem;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
-        }
-
-        .project-filter {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: rgba(26, 31, 66, 0.5);
-            border: 1.5px solid #2a3054;
-            color: #888;
-            padding: 0.6rem 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: inherit;
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 107, 157, 0.1);
-            transition: left 0.3s;
-        }
-
-        .filter-btn:hover::before {
-            left: 100%;
-        }
-
-        .filter-btn:hover {
-            border-color: #ff6b9d;
-            color: #ff6b9d;
-        }
-
-        .filter-btn.active {
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff5587 100%);
-            border-color: #ff6b9d;
-            color: #0a0e27;
-            box-shadow: 0 8px 16px rgba(255, 107, 157, 0.3);
-            font-weight: 700;
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .project {
-            background: rgba(15, 20, 41, 0.6);
-            border: 1px solid rgba(255, 107, 157, 0.1);
-            padding: 2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-        }
-
-        .project::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 107, 157, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .project::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ff6b9d, transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .project:hover {
-            border-color: #ff6b9d;
-            background: rgba(15, 20, 41, 0.85);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(255, 107, 157, 0.2);
-        }
-
-        .project:hover::before {
-            left: 100%;
-        }
-
-        .project:hover::after {
-            opacity: 1;
-        }
-
-        .project h3 {
-            color: #ff6b9d;
-            margin-bottom: 0.5rem;
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .project-tech {
-            color: #555;
-            font-size: 0.75rem;
-            margin-bottom: 1rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .project p {
-            color: #999;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .project-link {
-            color: #a0a0ff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            display: inline-block;
-            font-weight: 600;
-            position: relative;
-        }
-
-        .project-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: #ff6b9d;
-            transition: width 0.3s;
-        }
-
-        .project-link:hover {
-            color: #ff6b9d;
-        }
-
-        .project-link:hover::after {
-            width: 100%;
-        }
-
-        /* Skills */
-        .skills {
-            padding: 5rem 2rem;
-            background: linear-gradient(180deg, rgba(15, 20, 41, 0.5) 0%, rgba(15, 20, 41, 0.3) 100%);
-            margin: 3rem 0;
-            border-top: 1px solid rgba(255, 107, 157, 0.1);
-            border-bottom: 1px solid rgba(255, 107, 157, 0.1);
-        }
-
-        .skills-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .skills h2 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .skill-group {
-            margin-bottom: 3rem;
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .skill-group h3 {
-            color: #ff6b9d;
-            font-size: 0.9rem;
-            margin-bottom: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 700;
-        }
-
-        .skill-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .skill-tag {
-            background: linear-gradient(135deg, rgba(26, 31, 66, 0.8), rgba(26, 31, 66, 0.6));
-            padding: 0.65rem 1.3rem;
-            border: 1.5px solid rgba(160, 160, 255, 0.3);
-            color: #a0a0ff;
-            font-size: 0.85rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            text-transform: capitalize;
-            font-weight: 600;
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .skill-tag::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 107, 157, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .skill-tag:hover {
-            border-color: #ff6b9d;
-            color: #ff6b9d;
-            background: linear-gradient(135deg, rgba(26, 31, 66, 0.95), rgba(26, 31, 66, 0.8));
-            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .skill-tag:hover::before {
-            left: 100%;
-        }
-
-        .skill-tag.selected {
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff5587 100%);
-            color: #0a0e27;
-            border-color: #ff6b9d;
-            box-shadow: 0 8px 16px rgba(255, 107, 157, 0.3);
-            transform: scale(1.05);
-        }
-
-        /* About */
-        .about {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .about h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .about-text {
-            color: #aaa;
-            max-width: 800px;
-            line-height: 1.9;
-            font-size: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 2rem;
-        }
-
-        .stat {
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(15, 20, 41, 0.8), rgba(15, 20, 41, 0.6));
-            border: 1px solid rgba(255, 107, 157, 0.2);
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 0;
-            background: linear-gradient(180deg, #ff6b9d, #ff5587);
-            transition: height 0.3s;
-        }
-
-        .stat:hover {
-            background: linear-gradient(135deg, rgba(15, 20, 41, 0.95), rgba(15, 20, 41, 0.85));
-            border-color: #ff6b9d;
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(255, 107, 157, 0.15);
-        }
-
-        .stat:hover::before {
-            height: 100%;
-        }
-
-        .stat-num {
-            font-size: 2.8rem;
-            color: #ff6b9d;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        /* Contact */
-        .contact {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .contact h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .contact-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            margin-top: 3rem;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .contact-item {
-            padding: 1.5rem;
-            background: rgba(15, 20, 41, 0.6);
-            border: 1px solid rgba(255, 107, 157, 0.1);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .contact-item:hover {
-            border-color: #ff6b9d;
-            background: rgba(15, 20, 41, 0.85);
-            transform: translateY(-2px);
-        }
-
-        .contact-item h3 {
-            color: #ff6b9d;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .contact-item a,
-        .contact-item p {
-            color: #aaa;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .contact-item a:hover {
-            color: #ff6b9d;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .form-group label {
-            color: #a0a0ff;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            background: rgba(15, 20, 41, 0.6);
-            border: 1px solid rgba(255, 107, 157, 0.1);
-            border-radius: 6px;
-            padding: 0.9rem 1.2rem;
-            color: #e0e0e0;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: all 0.3s;
-            resize: vertical;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #ff6b9d;
-            background: rgba(15, 20, 41, 0.85);
-            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-        }
-
-        .submit-btn {
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff5587 100%);
-            border: none;
-            border-radius: 6px;
-            color: #0a0e27;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 24px rgba(255, 107, 157, 0.3);
-            align-self: flex-start;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(255, 107, 157, 0.4);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .form-message {
-            padding: 1rem;
-            border-radius: 6px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        .form-message.success {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            color: #4ade80;
-        }
-
-        .form-message.error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #f87171;
-        }
-
-        /* Footer */
-        footer {
-            padding: 3rem 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(255, 107, 157, 0.1);
-            background: rgba(10, 14, 39, 0.8);
-            color: #555;
-            font-size: 0.85rem;
-        }
-
-        footer p {
-            margin-bottom: 1rem;
-        }
-
-        footer a {
-            color: #a0a0ff;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        footer a:hover {
-            color: #ff6b9d;
-        }
-
-        /* Scroll-triggered Animations */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(50px) scale(0.95);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .animate-on-scroll.animated {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .animate-fade-up {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .animate-fade-up.animated {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .animate-fade-left {
-            opacity: 0;
-            transform: translateX(-40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .animate-fade-left.animated {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .animate-fade-right {
-            opacity: 0;
-            transform: translateX(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .animate-fade-right.animated {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .animate-scale {
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .animate-scale.animated {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .animate-rotate {
-            opacity: 0;
-            transform: rotate(-5deg) scale(0.9);
-            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .animate-rotate.animated {
-            opacity: 1;
-            transform: rotate(0deg) scale(1);
-        }
-
-        /* Stagger delays */
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
-        .delay-4 { transition-delay: 0.4s; }
-        .delay-5 { transition-delay: 0.5s; }
-
-        /* Animations */
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .fade-in {
-            animation: slideInUp 0.6s ease forwards;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero .subtitle {
-                font-size: 1.05rem;
-            }
-
-            .project-grid {
-                grid-template-columns: 1fr;
-            }
-
-            nav ul {
-                flex-wrap: wrap;
-                gap: 1rem;
-                font-size: 0.85rem;
-            }
-
-            .skills h2,
-            .projects h2,
-            .about h2 {
-                font-size: 2rem;
-            }
-
-            .stat-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero {
-                min-height: 60vh;
-            }
-
-            .cta {
-                width: 100%;
-                text-align: center;
-            }
-
-            .contact-container {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .contact h2 {
-                font-size: 2rem;
-            }
-
-            .submit-btn {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amar – 13yo coder</title>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0a0c18;
+      color: #e0e0ff;
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    .glow-orb {
+      position: fixed;
+      top: -30%; right: -20%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle at 30% 40%, #ff6b9d44 0%, transparent 60%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: drift 18s ease-in-out infinite alternate;
+      z-index: -2;
+      filter: blur(60px);
+    }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(80px, 120px) rotate(12deg); }
+    }
+
+    nav {
+      position: sticky; top: 0;
+      background: rgba(12,14,28,0.92);
+      backdrop-filter: blur(10px);
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid #ff6b9d22;
+      z-index: 100;
+    }
+    nav ul {
+      list-style: none;
+      display: flex; gap: 2.2rem;
+      max-width: 1100px; margin: 0 auto;
+      justify-content: center;
+    }
+    nav a {
+      color: #b0c0ff; text-decoration: none; font-weight: 500;
+      position: relative; padding-bottom: 4px;
+      transition: color 0.25s;
+    }
+    nav a::after {
+      content: ''; position: absolute; bottom: 0; left: 50%;
+      width: 0; height: 2px; background: #ff6b9d;
+      transition: all 0.35s ease; transform: translateX(-50%);
+    }
+    nav a:hover::after, nav a.active::after { width: 80%; }
+    nav a:hover, nav a.active { color: #ff8ab3; }
+
+    .section {
+      max-width: 1100px; margin: 0 auto;
+      padding: 5rem 1.5rem 4rem;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3.8rem;
+      background: linear-gradient(90deg, #ff6b9d, #c084fc, #ff6b9d);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent; background-size: 200% 100%;
+      animation: gradientFlow 6s linear infinite;
+      margin-bottom: 1.2rem;
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .cursor {
+      color: #ff6b9d;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .subtitle { font-size: 1.35rem; color: #a0a0ff; margin-bottom: 1.6rem; opacity: 0.95; }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff6b9d, #ff458a);
+      color: white; padding: 0.85rem 2rem;
+      border-radius: 8px; text-decoration: none; font-weight: 700;
+      transition: all 0.28s ease;
+      box-shadow: 0 4px 20px #ff6b9d44;
+    }
+    .btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 8px 30px #ff6b9d66;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem; margin-top: 2.5rem;
+    }
+    .project {
+      background: #11151f; border: 1px solid #242a44;
+      border-radius: 10px; padding: 1.8rem;
+      transition: all 0.4s ease;
+      transform: perspective(1000px) rotateX(0) rotateY(0);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+      position: relative; overflow: hidden;
+    }
+    .project::before {
+      content: ''; position: absolute; top:0; left:-100%;
+      width:50%; height:100%;
+      background: linear-gradient(90deg, transparent, rgba(255,107,157,0.12), transparent);
+      transition: left 0.7s;
+    }
+    .project:hover::before { left: 100%; }
+    .project:hover {
+      border-color: #ff6b9d80;
+      transform: perspective(1000px) rotateX(4deg) rotateY(6deg) translateY(-8px);
+      box-shadow: 0 20px 50px rgba(255,107,157,0.3);
+    }
+    .project h3 { color: #ff8ab3; margin-bottom: 0.7rem; }
+    .project-tech { font-size: 0.84rem; color: #64748b; margin-bottom: 1.1rem; letter-spacing: 0.4px; }
+
+    .skill-group { margin: 2.8rem 0; }
+    .skill-group h3 { color: #ff9bb3; margin-bottom: 1.2rem; font-size: 1.15rem; }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .skill {
+      background: #1a1f32; border: 1px solid #333a55;
+      padding: 0.6rem 1.3rem; border-radius: 8px;
+      font-size: 0.95rem; color: #d0d8ff;
+      transition: all 0.25s; cursor: default;
+    }
+    .skill:hover {
+      transform: translateY(-3px) scale(1.06);
+      border-color: #ff6b9d;
+      box-shadow: 0 6px 20px #ff6b9d44;
+      background: #21263a;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.8rem; margin-top: 2.5rem;
+    }
+    .stat {
+      background: #11151f; border: 1px solid #242a44;
+      padding: 1.6rem; border-radius: 10px;
+      text-align: center; transition: all 0.35s;
+    }
+    .stat:hover {
+      border-color: #ff6b9d70; transform: translateY(-6px);
+    }
+    .stat-num {
+      font-size: 3.4rem;
+      font-weight: 800;
+      color: #ff8ab3;
+      line-height: 1;
+      min-width: 80px;
+      display: inline-block;
+    }
+
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; margin-top: 3rem;
+    }
+    .contact-item { margin-bottom: 1.8rem; }
+    .contact-item h3 { color: #ff9bb3; margin-bottom: 0.6rem; }
+    .contact-item a { color: #b0c0ff; transition: color 0.2s; }
+    .contact-item a:hover { color: #ff8ab3; }
+
+    form { display: flex; flex-direction: column; gap: 1.4rem; }
+    input, textarea {
+      background: #11151f; border: 1px solid #242a44;
+      padding: 1rem 1.3rem; border-radius: 8px;
+      color: #e0e0ff; font-family: inherit;
+      transition: border-color 0.25s;
+    }
+    input:focus, textarea:focus {
+      outline: none; border-color: #ff6b9d;
+      box-shadow: 0 0 0 3px #ff6b9d22;
+    }
+    textarea { min-height: 150px; }
+
+    footer {
+      text-align: center; padding: 4rem 1rem 2.5rem;
+      color: #64748b; border-top: 1px solid #1e2338;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 850px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+      h1 { font-size: 3rem; }
+      nav ul { gap: 1.4rem; flex-wrap: wrap; }
+    }
+  </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef, useCallback } = React;
+<div class="glow-orb"></div>
+<div id="root"></div>
 
-        // Cool scroll-triggered animation hook
-        const useScrollAnimation = (options = {}) => {
-            const [isAnimated, setIsAnimated] = useState(false);
-            const elementRef = useRef(null);
-            const { threshold = 0.15, rootMargin = '0px 0px -50px 0px', once = false } = options;
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
 
-            useEffect(() => {
-                const element = elementRef.current;
-                if (!element) return;
+function Nav() {
+  const [active, setActive] = useState("home");
 
-                const observer = new IntersectionObserver(
-                    (entries) => {
-                        entries.forEach((entry) => {
-                            if (entry.isIntersecting) {
-                                setIsAnimated(true);
-                                if (once) {
-                                    observer.unobserve(element);
-                                }
-                            } else if (!once) {
-                                setIsAnimated(false);
-                            }
-                        });
-                    },
-                    { threshold, rootMargin }
-                );
+  useEffect(() => {
+    const onScroll = () => {
+      const ids = ["home","projects","skills","about","contact"];
+      let cur = "home";
+      for (let id of ids.slice().reverse()) {
+        const el = document.getElementById(id);
+        if (el && window.scrollY + 220 >= el.offsetTop) {
+          cur = id; break;
+        }
+      }
+      setActive(cur);
+    };
+    window.addEventListener("scroll", onScroll);
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-                observer.observe(element);
-                return () => {
-                    if (element) observer.unobserve(element);
-                };
-            }, [threshold, rootMargin, once]);
+  const scroll = id => {
+    document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
+    setActive(id);
+  };
 
-            return [elementRef, isAnimated];
-        };
+  return (
+    <nav>
+      <ul>
+        {["home","projects","skills","about","contact"].map(id => (
+          <li key={id}>
+            <a 
+              href={`#${id}`} 
+              className={active === id ? "active" : ""}
+              onClick={e => {e.preventDefault(); scroll(id)}}
+            >{id}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
 
-        const Nav = () => {
-            const [activeSection, setActiveSection] = useState('home');
-            const isClickingRef = useRef(false);
+function Hero() {
+  const [text, setText] = useState("");
+  const full = "building cool stuff";
 
-            useEffect(() => {
-                const handleScroll = () => {
-                    if (isClickingRef.current) return;
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < full.length) {
+        setText(full.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 80);
+    setText(full[0] || "");
+    return () => clearInterval(interval);
+  }, []);
 
-                    const sections = ['home', 'projects', 'skills', 'about', 'contact'];
-                    const scrollPos = window.scrollY;
-                    const viewportThreshold = scrollPos + 200;
-                    let currentSection = 'home';
-                    for (let i = sections.length - 1; i >= 0; i--) {
-                        const section = sections[i];
-                        const element = document.getElementById(section);
-                        if (element) {
-                            const elementTop = element.offsetTop;
-                            if (viewportThreshold >= elementTop) {
-                                currentSection = section;
-                                break;
-                            }
-                        }
-                    }
+  return (
+    <section className="section" id="home">
+      <h1 style={{ minHeight: "90px" }}>
+        {text}
+        <span className="cursor" style={{ opacity: text.length < full.length ? 1 : 0 }}>_</span>
+      </h1>
+      <div className="subtitle">13 y/o • self-taught • ai + web</div>
+      <p style={{maxWidth:"600px", color:"#c0c0e0", margin:"1.5rem 0 2.5rem"}}>
+        started september 2025 with html/css → now mostly python + ai experiments<br/>
+        i hate css
+      </p>
+      <a href="#projects" className="btn" onClick={e=>{
+        e.preventDefault();
+        document.getElementById("projects")?.scrollIntoView({behavior:"smooth"});
+      }}>
+        look at my stuff →
+      </a>
+    </section>
+  );
+}
 
-                    setActiveSection(currentSection);
-                };
+function Projects() {
+  const projs = [
+    {t:"cypher ai", tech:"Python • AI • Voice • Electron", d:"chatbot that runs on my rx 580. running the deepseek r1:8b  • code • web search • os control"},
+    {t:"betterdynaphase", tech:"React • JS • CSS", d:"first project where i actually planned stuff instead of just copying"},
+    {t:"tuff site 1 & 2", tech:"HTML • CSS • Vanilla JS", d:"my first real websites. meme clickers. ugly but i built them"},
+    {t:"trash-cooks", tech:"JS • API • HTML", d:"random recipe thing with api • learned a lot about apis"}
+  ];
 
-                // Initial check
-                handleScroll();
+  return (
+    <section className="section" id="projects">
+      <h2 style={{color:"white", marginBottom:"2.5rem"}}>projects</h2>
+      <div className="project-grid">
+        {projs.map(p => (
+          <div className="project" key={p.t}>
+            <h3>{p.t}</h3>
+            <div className="project-tech">{p.tech}</div>
+            <p style={{color:"#c8d0e8"}}>{p.d}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
+function Skills() {
+  const groups = [
+    {title:"languages", s:["Python","JavaScript","HTML","CSS"]},
+    {title:"what i enjoy", s:["AI / LLMs","Chatbots","Frontend"]},
+    {title:"tools i use", s:["React","Node.js","NumPy","Electron"]}
+  ];
 
-            const navItems = [
-                { id: 'home', label: 'home' },
-                { id: 'projects', label: 'projects' },
-                { id: 'skills', label: 'skills' },
-                { id: 'about', label: 'about' },
-                { id: 'contact', label: 'contact' }
-            ];
+  return (
+    <section className="section" id="skills">
+      <h2 style={{color:"white", marginBottom:"2.5rem"}}>skills</h2>
+      {groups.map(g => (
+        <div className="skill-group" key={g.title}>
+          <h3>{g.title}</h3>
+          <div className="skill-list">
+            {g.s.map(skill => <span className="skill" key={skill}>{skill}</span>)}
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
 
-            const handleNavClick = (sectionId) => {
-                // Immediately set active section
-                setActiveSection(sectionId);
-                isClickingRef.current = true;
+function Stat({ target, label, duration = 1800 }) {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
 
-                const element = document.getElementById(sectionId);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                }
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
 
-                // Allow scroll handler to take over after scroll completes
-                setTimeout(() => {
-                    isClickingRef.current = false;
-                }, 1000);
-            };
+    if (ref.current) observer.observe(ref.current);
 
-            return (
-                <nav>
-                    <ul>
-                        {navItems.map((item, idx) => (
-                            <li key={item.id} style={{ animation: `fadeIn 0.5s ease ${idx * 0.1}s forwards` }}>
-                                <a 
-                                    href={`#${item.id}`}
-                                    className={activeSection === item.id ? 'active' : ''}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handleNavClick(item.id);
-                                    }}
-                                >
-                                    {item.label}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            );
-        };
+    return () => observer.disconnect();
+  }, []);
 
-        const Hero = () => {
-            const [displayedText, setDisplayedText] = useState('');
-            const fullText = 'building cool stuff';
-            const [isTyping, setIsTyping] = useState(true);
-            const [h1Ref, h1Animated] = useScrollAnimation({ threshold: 0.1, once: true });
-            const [subtitleRef, subtitleAnimated] = useScrollAnimation({ threshold: 0.1, once: true });
-            const [pRef, pAnimated] = useScrollAnimation({ threshold: 0.1, once: true });
-            const [ctaRef, ctaAnimated] = useScrollAnimation({ threshold: 0.1, once: true });
+  useEffect(() => {
+    if (!isVisible || target === null) return;
 
-            useEffect(() => {
-                let index = 0;
-                const timer = setInterval(() => {
-                    if (index < fullText.length) {
-                        setDisplayedText(fullText.slice(0, index + 1));
-                        index++;
-                    } else {
-                        setIsTyping(false);
-                        clearInterval(timer);
-                    }
-                }, 70);
+    let start = 0;
+    const step = target / (duration / 16); // ~60fps
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
 
-                return () => clearInterval(timer);
-            }, []);
+    return () => clearInterval(timer);
+  }, [isVisible, target, duration]);
 
-            return (
-                <section className="hero" id="home">
-                    <h1 ref={h1Ref} className={`animate-fade-up ${h1Animated ? 'animated' : ''}`}>
-                        {displayedText}
-                        {isTyping && <span className="typing-effect">_</span>}
-                    </h1>
-                    <p ref={subtitleRef} className={`subtitle animate-fade-up delay-1 ${subtitleAnimated ? 'animated' : ''}`}>
-                        13 years old. 4 projects. 1 ai app that actually works.
-                    </p>
-                    <p ref={pRef} className={`animate-fade-up delay-2 ${pAnimated ? 'animated' : ''}`}>
-                        coded my way from html basics to machine learning. currently building cypher—an ai assistant with voice, web search, code execution, and more. all running on an rx 580. way more planned.
-                    </p>
-                    <a 
-                        ref={ctaRef}
-                        href="#projects" 
-                        className={`cta animate-scale delay-3 ${ctaAnimated ? 'animated' : ''}`}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-                        }}
-                    >
-                        see projects →
-                    </a>
-                </section>
-            );
-        };
+  return (
+    <div className="stat" ref={ref}>
+      <div className="stat-num">
+        {target === null ? "∞" : count}
+      </div>
+      <div>{label}</div>
+    </div>
+  );
+}
 
-        const ProjectCard = ({ project, index }) => {
-            const [cardRef, cardAnimated] = useScrollAnimation({ threshold: 0.2 });
-            return (
-                <div 
-                    ref={cardRef}
-                    key={project.id} 
-                    className={`project animate-on-scroll ${cardAnimated ? 'animated' : ''}`}
-                    style={{ transitionDelay: `${index * 0.1}s` }}
-                >
-                    <h3>{project.title}</h3>
-                    <div className="project-tech">{project.tech}</div>
-                    <p>{project.description}</p>
-                    <a href="#" className="project-link">→ check it out</a>
-                </div>
-            );
-        };
+function About() {
+  return (
+    <section className="section" id="about">
+      <h2 style={{color:"white", marginBottom:"2rem"}}>about</h2>
+      <p style={{maxWidth:"680px", color:"#c0c0e0", fontSize:"1.05rem"}}>
+        bosnic amar, 13, sarajevo<br/>
+        started coding september 2025. started HTML with freeCodeCamp, realised frontend devs are broke, now deep into ai stuff<br/>
+        right now trying to turn cypher into something actually useful on trash hardware lol.
+      </p>
 
-        const Projects = () => {
-            const [filter, setFilter] = useState('all');
-            const [projects] = useState([
-                {
-                    id: 1,
-                    title: 'cypher ai',
-                    tech: 'PYTHON · AI · VOICE · ELECTRON',
-                    description: 'ai assistant that actually works. chatbot, code execution, voice mode, os controls, web search. running on rx 580 with way more planned.',
-                    category: 'ai'
-                },
-                {
-                    id: 2,
-                    title: 'betterdynaphase',
-                    tech: 'HTML · CSS · JAVASCRIPT',
-                    description: 'solid web foundation. learned how to structure real projects instead of just following tutorials.',
-                    category: 'web'
-                },
-                {
-                    id: 3,
-                    title: 'tuff site 1 & 2',
-                    tech: 'HTML · CSS · JAVASCRIPT',
-                    description: 'early projects that proved i could actually build instead of just watch videos.',
-                    category: 'web'
-                },
-                {
-                    id: 4,
-                    title: 'trash-cooks',
-                    tech: 'AI · JAVASCRIPT · HTML · CSS · NODE.JS',
-                    description: 'simple but taught me how APIs work and how to use them.',
-                    category: 'ai'
-                }
-            ]);
+      <div className="stats">
+        <Stat target={4}   label="projects done" />
+        <Stat target={13}  label="years old" />
+        <Stat target={null} label="potential" />
+      </div>
+    </section>
+  );
+}
 
-            const [headerRef, headerAnimated] = useScrollAnimation({ threshold: 0.2 });
-            const [filterRef, filterAnimated] = useScrollAnimation({ threshold: 0.2 });
+function Contact() {
+  return (
+    <section className="section" id="contact">
+      <h2 style={{color:"white", marginBottom:"2.5rem"}}>say hi</h2>
+      <div className="contact-grid">
+        <div>
+          <div className="contact-item"><h3>email</h3><a href="mailto:bosnicc.business@gmail.com">bosnicc.business@gmail.com</a></div>
+          <div className="contact-item"><h3>github</h3><a href="https://github.com/bosnicc404" target="_blank">github.com/bosnicc404</a></div>
+          <div className="contact-item"><h3>discord</h3><p>boxic._.</p></div>
+          <div className="contact-item"><h3>from</h3><p>Sarajevo, Bosnia</p><p>remote = ok</p></div>
+        </div>
 
-            const filteredProjects = filter === 'all' 
-                ? projects 
-                : projects.filter(p => p.category === filter);
+        <form action="https://formspree.io/f/mojjqrkb" method="POST">
+          <input type="text"     name="name"    placeholder="your name"    required />
+          <input type="email"    name="email"   placeholder="email"        required />
+          <textarea name="message" placeholder="what u wanna talk about?" required rows={6}></textarea>
+          <button type="submit" className="btn">send message →</button>
+        </form>
+      </div>
+    </section>
+  );
+}
 
-            return (
-                <section className="projects" id="projects">
-                    <div ref={headerRef} className={`animate-fade-up ${headerAnimated ? 'animated' : ''}`}>
-                        <h2>projects</h2>
-                        <p className="section-desc">stuff i actually built</p>
-                    </div>
-                    
-                    <div ref={filterRef} className={`project-filter animate-fade-up delay-1 ${filterAnimated ? 'animated' : ''}`}>
-                        {['all', 'ai', 'web'].map((cat, idx) => (
-                            <button
-                                key={cat}
-                                className={`filter-btn ${filter === cat ? 'active' : ''}`}
-                                onClick={() => setFilter(cat)}
-                            >
-                                {cat === 'all' ? 'all' : cat === 'ai' ? 'ai/ml' : 'web'}
-                            </button>
-                        ))}
-                    </div>
+function App() {
+  return (
+    <>
+      <Nav />
+      <Hero />
+      <Projects />
+      <Skills />
+      <About />
+      <Contact />
+      <footer>
+        made by me fueled by my hatred for css © {new Date().getFullYear()}
+      </footer>
+    </>
+  );
+}
 
-                    <div className="project-grid">
-                        {filteredProjects.map((project, index) => (
-                            <ProjectCard key={project.id} project={project} index={index} />
-                        ))}
-                    </div>
-                </section>
-            );
-        };
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
 
-        const SkillGroup = ({ group, selectedSkills, toggleSkill, index }) => {
-            const [groupRef, groupAnimated] = useScrollAnimation({ threshold: 0.2 });
-            return (
-                <div 
-                    ref={groupRef}
-                    key={group.title} 
-                    className={`skill-group animate-fade-left ${groupAnimated ? 'animated' : ''}`}
-                    style={{ transitionDelay: `${index * 0.15}s` }}
-                >
-                    <h3>{group.title}</h3>
-                    <div className="skill-list">
-                        {group.skills.map((skill, idx) => (
-                            <span
-                                key={skill}
-                                className={`skill-tag animate-scale ${groupAnimated ? 'animated' : ''} ${selectedSkills.has(skill) ? 'selected' : ''}`}
-                                onClick={() => toggleSkill(skill)}
-                                style={{ transitionDelay: `${index * 0.15 + idx * 0.05}s` }}
-                            >
-                                {skill}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            );
-        };
-
-        const Skills = () => {
-            const [selectedSkills, setSelectedSkills] = useState(new Set());
-            const [headerRef, headerAnimated] = useScrollAnimation({ threshold: 0.2 });
-
-            const skillGroups = [
-                {
-                    title: 'languages',
-                    skills: ['Python', 'JavaScript', 'HTML', 'CSS']
-                },
-                {
-                    title: 'specialties',
-                    skills: ['Machine Learning', 'AI Development', 'Web Dev']
-                },
-                {
-                    title: 'tools & frameworks',
-                    skills: ['React', 'Node.js', 'NumPy', 'Electron', 'Cursor']
-                }
-            ];
-
-            const toggleSkill = (skill) => {
-                setSelectedSkills(prev => {
-                    const newSet = new Set(prev);
-                    if (newSet.has(skill)) {
-                        newSet.delete(skill);
-                    } else {
-                        newSet.add(skill);
-                    }
-                    return newSet;
-                });
-            };
-
-            return (
-                <section className="skills" id="skills">
-                    <div className="skills-container">
-                        <h2 ref={headerRef} className={`animate-fade-up ${headerAnimated ? 'animated' : ''}`}>skills</h2>
-                        
-                        {skillGroups.map((group, groupIdx) => (
-                            <SkillGroup
-                                key={group.title}
-                                group={group}
-                                selectedSkills={selectedSkills}
-                                toggleSkill={toggleSkill}
-                                index={groupIdx}
-                            />
-                        ))}
-                    </div>
-                </section>
-            );
-        };
-
-        const StatCard = ({ stat, index, target, onAnimate }) => {
-            const [statRef, statAnimated] = useScrollAnimation({ threshold: 0.2, once: true });
-            const hasAnimatedRef = useRef(false);
-            const animationStartedRef = useRef(false);
-            
-            useEffect(() => {
-                if (statAnimated && !hasAnimatedRef.current && !animationStartedRef.current && onAnimate && target !== null && target !== undefined) {
-                    hasAnimatedRef.current = true;
-                    animationStartedRef.current = true;
-                    
-                    let current = 0;
-                    const duration = 1500; // 1.5 seconds
-                    const steps = 50;
-                    const increment = target / steps;
-                    const intervalTime = duration / steps;
-                    
-                    const timer = setInterval(() => {
-                        current += increment;
-                        if (current >= target) {
-                            onAnimate(index, target);
-                            clearInterval(timer);
-                        } else {
-                            onAnimate(index, Math.floor(current));
-                        }
-                    }, intervalTime);
-                    
-                    return () => clearInterval(timer);
-                }
-            }, [statAnimated, target, index, onAnimate]);
-
-            return (
-                <div 
-                    ref={statRef}
-                    key={index} 
-                    className={`stat animate-scale ${statAnimated ? 'animated' : ''}`}
-                    style={{ transitionDelay: `${index * 0.1}s` }}
-                >
-                    <div className="stat-num">{stat.num}</div>
-                    <div className="stat-label">{stat.label}</div>
-                </div>
-            );
-        };
-
-        const About = () => {
-            const [stats, setStats] = useState([
-                { num: 0, label: 'completed projects', target: 4 },
-                { num: 0, label: 'years old', target: 13 },
-                { num: '∞', label: 'potential', target: null }
-            ]);
-            const [headerRef, headerAnimated] = useScrollAnimation({ threshold: 0.2 });
-            const [textRef, textAnimated] = useScrollAnimation({ threshold: 0.2 });
-
-            const handleStatUpdate = useCallback((index, value) => {
-                setStats(prev => {
-                    const newStats = [...prev];
-                    newStats[index] = { ...prev[index], num: value };
-                    return newStats;
-                });
-            }, []);
-
-            return (
-                <section className="about" id="about">
-                    <h2 ref={headerRef} className={`animate-fade-up ${headerAnimated ? 'animated' : ''}`}>about</h2>
-                    <p ref={textRef} className={`about-text animate-fade-up delay-1 ${textAnimated ? 'animated' : ''}`}>
-                        13 years old and obsessed with building. started with freecodecamp, now building production-level ai. straight a's every year except sometimes math (physics and chemistry hit different tho). basketball, working out, and coding are basically my whole life. when you actually understand the science behind stuff, it slaps way harder. informatics class is mid because i already know half the material and the other half is just excel stuff nobody needs.
-                    </p>
-                    
-                    <div className="stat-grid">
-                        {stats.map((stat, index) => (
-                            <StatCard
-                                key={index}
-                                stat={stat}
-                                index={index}
-                                target={stat.target}
-                                onAnimate={handleStatUpdate}
-                            />
-                        ))}
-                    </div>
-                </section>
-            );
-        };
-
-        const ContactItem = ({ title, children, index }) => {
-            const [itemRef, itemAnimated] = useScrollAnimation({ threshold: 0.2 });
-            return (
-                <div 
-                    ref={itemRef}
-                    className={`contact-item animate-fade-right ${itemAnimated ? 'animated' : ''}`}
-                    style={{ transitionDelay: `${index * 0.1}s` }}
-                >
-                    <h3>{title}</h3>
-                    {children}
-                </div>
-            );
-        };
-
-        const Contact = () => {
-            const [formData, setFormData] = useState({
-                name: '',
-                email: '',
-                message: ''
-            });
-            const [status, setStatus] = useState('idle'); // idle, submitting, success, error
-            const [message, setMessage] = useState({ type: '', text: '' });
-            const [headerRef, headerAnimated] = useScrollAnimation({ threshold: 0.2 });
-            const [formRef, formAnimated] = useScrollAnimation({ threshold: 0.2 });
-
-            const handleChange = (e) => {
-                setFormData({
-                    ...formData,
-                    [e.target.name]: e.target.value
-                });
-            };
-
-            const handleSubmit = async (e) => {
-                e.preventDefault();
-                
-                // Basic validation
-                if (!formData.name || !formData.email || !formData.message) {
-                    setMessage({ type: 'error', text: 'Please fill in all fields.' });
-                    return;
-                }
-
-                setStatus('submitting');
-                setMessage({ type: '', text: '' });
-
-                try {
-                    const response = await fetch("https://formspree.io/f/mojjqrkb", {
-                        method: "POST",
-                        body: JSON.stringify(formData),
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        setStatus('success');
-                        setMessage({ type: 'success', text: 'Message sent! I\'ll get back to you soon.' });
-                        setFormData({ name: '', email: '', message: '' });
-                        
-                        setTimeout(() => {
-                            setMessage({ type: '', text: '' });
-                            setStatus('idle');
-                        }, 5000);
-                    } else {
-                        const data = await response.json();
-                        setStatus('error');
-                        if (Object.hasOwn(data, 'errors')) {
-                            setMessage({ type: 'error', text: data["errors"].map(error => error["message"]).join(", ") });
-                        } else {
-                            setMessage({ type: 'error', text: "Oops! There was a problem submitting your form" });
-                        }
-                    }
-                } catch (error) {
-                    setStatus('error');
-                    setMessage({ type: 'error', text: "Oops! There was a problem submitting your form" });
-                }
-            };
-
-            return (
-                <section className="contact" id="contact">
-                    <div ref={headerRef} className={`animate-fade-up ${headerAnimated ? 'animated' : ''}`}>
-                        <h2>contact</h2>
-                        <p className="section-desc">let's build something together</p>
-                    </div>
-                    
-                    <div className="contact-container">
-                        <div className="contact-info">
-                            <ContactItem title="email" index={0}>
-                                <a href="mailto:bosnicc.business@gmail.com">bosnicc.business@gmail.com</a>
-                            </ContactItem>
-                            <ContactItem title="github" index={1}>
-                                <a href="https://github.com/bosnicc404" target="_blank" rel="noopener noreferrer">
-                                    github.com/bosnicc404
-                                </a>
-                            </ContactItem>
-                            <ContactItem title="discord" index={2}>
-                                <p>boxic._.</p>
-                            </ContactItem>
-                            <ContactItem title="location" index={3}>
-                                <p>Sarajevo, Bosnia and Herzegovina</p>
-                                <p>available for remote work</p>
-                            </ContactItem>
-                        </div>
-
-                        <form ref={formRef} className={`contact-form animate-fade-left ${formAnimated ? 'animated' : ''}`} onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <label htmlFor="name">name</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    placeholder="your name"
-                                    required
-                                    disabled={status === 'submitting'}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="email">email</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="your.email@example.com"
-                                    required
-                                    disabled={status === 'submitting'}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="message">message</label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    placeholder="what's on your mind?"
-                                    required
-                                    disabled={status === 'submitting'}
-                                />
-                            </div>
-                            <button type="submit" className="submit-btn" disabled={status === 'submitting'}>
-                                {status === 'submitting' ? 'sending...' : 'send message →'}
-                            </button>
-                            {message.text && (
-                                <div className={`form-message ${message.type}`}>
-                                    {message.text}
-                                </div>
-                            )}
-                        </form>
-                    </div>
-                </section>
-            );
-        };
-
-        const Footer = () => {
-            const currentYear = new Date().getFullYear();
-            return (
-                <footer>
-                    <p>built by me, myself and (a)i. © {currentYear}</p>
-                    <p style={{ fontSize: '0.75rem', color: '#444', marginTop: '1rem' }}>no templates. just react.</p>
-                </footer>
-            );
-        };
-
-        const App = () => {
-            return (
-                <>
-                    <Nav />
-                    <Hero />
-                    <Projects />
-                    <Skills />
-                    <About />
-                    <Contact />
-                    <Footer />
-                </>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
 </body>
 </html>
-
-
