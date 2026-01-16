@@ -925,22 +925,17 @@
 
             useEffect(() => {
                 const handleScroll = () => {
-                    // Don't update if we just clicked (wait for scroll to settle)
                     if (isClickingRef.current) return;
 
                     const sections = ['home', 'projects', 'skills', 'about', 'contact'];
                     const scrollPos = window.scrollY;
-                    const viewportThreshold = scrollPos + 200; // Offset for better detection
-
-                    // Check sections in reverse order to find the bottom-most section we've passed
+                    const viewportThreshold = scrollPos + 200;
                     let currentSection = 'home';
                     for (let i = sections.length - 1; i >= 0; i--) {
                         const section = sections[i];
                         const element = document.getElementById(section);
                         if (element) {
                             const elementTop = element.offsetTop;
-                            
-                            // If we've scrolled past this section's top, it's the active one
                             if (viewportThreshold >= elementTop) {
                                 currentSection = section;
                                 break;
@@ -1085,7 +1080,7 @@
                 {
                     id: 2,
                     title: 'betterdynaphase',
-                    tech: 'HTML · CSS · JAVASCRIPT · REACT',
+                    tech: 'HTML · CSS · JAVASCRIPT',
                     description: 'solid web foundation. learned how to structure real projects instead of just following tutorials.',
                     category: 'web'
                 },
@@ -1484,4 +1479,5 @@
     </script>
 </body>
 </html>
+
 
